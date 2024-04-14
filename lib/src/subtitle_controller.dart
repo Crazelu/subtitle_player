@@ -99,7 +99,8 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
 
   /// Sets playback speed.
   ///
-  /// Playback speed must not be negative or zero.
+  /// Playback speed must not be negative or zero
+  /// otherwise playback speed is set to the default value (1).
   void setPlaybackSpeed(num playbackSpeed) {
     if (playbackSpeed <= 0) {
       _playbackSpeed = 1;
