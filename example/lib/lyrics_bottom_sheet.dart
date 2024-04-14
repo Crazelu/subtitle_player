@@ -21,7 +21,7 @@ class _LyricsBottomSheetState extends State<LyricsBottomSheet> {
   static const _paddingCount = 8;
 
   void _createKeys(int length) {
-    if (length > 0 && length != _keys.length) {
+    if (length > 0 && length != _keys.length - _paddingCount) {
       _keys = List.generate(
         length + _paddingCount,
         (index) => GlobalKey(debugLabel: '$index'),

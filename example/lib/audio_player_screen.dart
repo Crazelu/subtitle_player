@@ -258,6 +258,10 @@ class ControlButtons extends StatelessWidget {
                 onChanged: (speed) {
                   player.setSpeed(speed);
                   subtitleController.setPlaybackSpeed(speed);
+                  // seek to the current player position
+                  // to resync the subtitles properly
+                  // after setting playback speed
+                  subtitleController.seekTo(player.position);
                 },
               );
             },
