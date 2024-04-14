@@ -69,6 +69,8 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
   Subtitle? _subtitle;
   int _currentSubtitleRangeIndex = 0;
 
+  num _playbackSpeed = 1;
+
   bool _shouldLoop = false;
 
   bool get _abort => _currentSubtitleRangeIndex == -1;
@@ -93,6 +95,17 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
   /// Sets whether or not the subtitle should loop after playing once.
   void setLooping(bool value) {
     _shouldLoop = value;
+  }
+
+  /// Sets playback speed.
+  ///
+  /// Playback speed must not be negative or zero.
+  void setPlaybackSpeed(num playbackSpeed) {
+    if (playbackSpeed <= 0) {
+      _playbackSpeed = 1;
+    } else {
+      _playbackSpeed = playbackSpeed;
+    }
   }
 
   void _queueNextSubtitleRange([bool wait = true]) async {
@@ -120,7 +133,11 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
     if (_currentSubtitleRangeIndex == 0 &&
         subtitleRange.start != Duration.zero &&
         wait) {
-      await Future.delayed(subtitleRange.start);
+      await Future.delayed(
+        Duration(
+          microseconds: subtitleRange.start.inMicroseconds ~/ _playbackSpeed,
+        ),
+      );
     }
 
     if (_abort) return;
@@ -134,7 +151,11 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
     _timer?.cancel();
 
     _timer = Timer(
-      subtitleRange.end - subtitleRange.start,
+      Duration(
+        microseconds:
+            (subtitleRange.end - subtitleRange.start).inMicroseconds ~/
+                _playbackSpeed,
+      ),
       () {
         if (_abort) return;
         _currentSubtitleRangeIndex++;
@@ -191,7 +212,10 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
       });
 
       _seekTimer = Timer(
-        subtitleRange.end - position,
+        Duration(
+          microseconds:
+              (subtitleRange.end - position).inMicroseconds ~/ _playbackSpeed,
+        ),
         () {
           _currentSubtitleRangeIndex = result.index + 1;
           _queueNextSubtitleRange();
@@ -199,7 +223,10 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
       );
     } else {
       _seekTimer = Timer(
-        subtitleRange.start - position,
+        Duration(
+          microseconds:
+              (subtitleRange.start - position).inMicroseconds ~/ _playbackSpeed,
+        ),
         () {
           _currentSubtitleRangeIndex = result.index;
           _queueNextSubtitleRange(false);

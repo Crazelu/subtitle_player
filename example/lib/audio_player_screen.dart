@@ -216,7 +216,6 @@ class ControlButtons extends StatelessWidget {
                 iconSize: 64.0,
                 onPressed: () {
                   player.play();
-                  print(player.position);
                   subtitleController.play(player.position);
                 },
               );
@@ -256,7 +255,10 @@ class ControlButtons extends StatelessWidget {
                 max: 1.5,
                 value: player.speed,
                 stream: player.speedStream,
-                onChanged: player.setSpeed,
+                onChanged: (speed) {
+                  player.setSpeed(speed);
+                  subtitleController.setPlaybackSpeed(speed);
+                },
               );
             },
           ),

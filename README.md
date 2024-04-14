@@ -1,11 +1,11 @@
 # Subtitle Player
-A Flutter package for synchronizing subtitles for video and audio playback.
+A Flutter package for synchronizing subtitles with video and audio playback.
 
 ## Features 📦
 
 - [x] Load SubRip, WebVTT and LRC subtitles
-- [x] Play, pause, seekTo and looping support
-- [ ] Playback speed
+- [x] Play, pause, seek and looping support
+- [x] Adjust playback speed
 
 ## Install 🚀
 
