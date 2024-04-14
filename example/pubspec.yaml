@@ -1,0 +1,29 @@
+name: example
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.17.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  subtitle_player:
+    path: ../
+  video_player: ^2.8.6
+  just_audio: ^0.9.37
+  rxdart: ^0.27.7
+  audio_session: ^0.1.19
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  plugin_platform_interface: ^2.1.8
+  video_player_platform_interface: ^6.2.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
