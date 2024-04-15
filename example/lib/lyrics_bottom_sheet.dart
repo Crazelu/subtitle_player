@@ -33,12 +33,21 @@ class _LyricsBottomSheetState extends State<LyricsBottomSheet> {
     Future.microtask(
       () async {
         if (_keys.isEmpty || index == -1) return;
+
         final nextIndex = index + _paddingCount;
         if (_keys.length - 1 < nextIndex) return;
 
-        final key = _keys[nextIndex];
+        GlobalKey key;
+
+        if (index <= _paddingCount) {
+          key = _keys[index];
+        } else {
+          key = _keys[nextIndex];
+        }
+
         final renderObject =
             key.currentContext?.findRenderObject() as RenderBox?;
+
         renderObject?.showOnScreen(
           duration: const Duration(milliseconds: 350),
         );

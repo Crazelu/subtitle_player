@@ -71,8 +71,6 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
 
   num _playbackSpeed = 1;
 
-  bool _shouldLoop = false;
-
   bool get _abort => _currentSubtitleRangeIndex == -1;
 
   /// Load subtitle content.
@@ -90,11 +88,6 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
         currentSubtitle: '',
       );
     });
-  }
-
-  /// Sets whether or not the subtitle should loop after playing once.
-  void setLooping(bool value) {
-    _shouldLoop = value;
   }
 
   /// Sets playback speed.
@@ -120,12 +113,6 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
         );
       });
 
-      if (_currentSubtitleRangeIndex == subtitleRanges.length && _shouldLoop) {
-        _currentSubtitleRangeIndex = 0;
-        _queueNextSubtitleRange();
-        return;
-      }
-
       return;
     }
 
@@ -149,13 +136,13 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
         currentSubtitleIndex: _currentSubtitleRangeIndex,
       );
     });
+
     _timer?.cancel();
+    final duration = (subtitleRange.end - subtitleRange.start).abs();
 
     _timer = Timer(
       Duration(
-        microseconds:
-            (subtitleRange.end - subtitleRange.start).inMicroseconds ~/
-                _playbackSpeed,
+        microseconds: duration.inMicroseconds ~/ _playbackSpeed,
       ),
       () {
         if (_abort) return;

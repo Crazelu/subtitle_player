@@ -4,7 +4,7 @@ A Flutter package for synchronizing subtitles with video and audio playback.
 ## Features 📦
 
 - [x] Load SubRip, WebVTT and LRC subtitles
-- [x] Play, pause, seek and looping support
+- [x] Play, pause and seek support
 - [x] Adjust playback speed
 
 ## Install 🚀
@@ -81,7 +81,7 @@ Check the [example project](https://github.com/Crazelu/subtitle_player/tree/main
 
 ## Demo 📷
 
-<img src="https://raw.githubusercontent.com/Crazelu/subtitle_player/main/demos/lyrics-demo.gif" width="280" alt="Example live lyrics demo"> <img src="https://raw.githubusercontent.com/Crazelu/subtitle_player/main/demos/video-subtitle-demo.gif" width="280" alt="Example video subtitle demo"> 
+<img src="https://raw.githubusercontent.com/Crazelu/subtitle_player/main/demos/video-player-demo.gif" width="280" alt="Example video subtitle demo"> <img src="https://raw.githubusercontent.com/Crazelu/subtitle_player/main/demos/audio-player-demo.gif" width="280" alt="Example live lyrics demo">
 
 ## Contributions 🫱🏾‍🫲🏼
 

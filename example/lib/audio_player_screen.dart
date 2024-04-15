@@ -32,26 +32,37 @@ class AudioPlayerScreenState extends State<AudioPlayerScreen>
 
   Future<void> _init() async {
     _subtitleController = SubtitleController();
+
     // Load subtitle file
-    final subtitleContent = await rootBundle.loadString('assets/XO.lrc');
+    final subtitleContent = await rootBundle.loadString('assets/demo.lrc');
     _subtitleController.loadSubtitle(Subtitle.fromLyrics(subtitleContent));
 
     // Inform the operating system of our app's audio attributes etc.
     // We pick a reasonable default for an app that plays speech.
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
-    // Listen to errors during playback.
-    _player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
+
+    // Register a callback to restart playing subtitle
+    // when player position is reset to 0. Only necessary for looping.
+    _player.playbackEventStream.listen((event) {
+      if (_player.playerState.playing &&
+          _player.position.inMinutes == 0 &&
+          _player.position.inSeconds == 0) {
+        _subtitleController.play(_player.position);
+      }
+    }, onError: (Object e, StackTrace stackTrace) {
+      // Listen to errors during playback.
       print('A stream error occurred: $e');
     });
     // Try to load audio from a source and catch any errors.
     try {
       // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
-      await _player.setAudioSource(AudioSource.asset('assets/XO.mp3'));
+      await _player.setAudioSource(AudioSource.asset('assets/demo.mp3'));
     } on PlayerException catch (e) {
       print("Error loading audio source: $e");
     }
+
+    _player.setLoopMode(LoopMode.all);
   }
 
   @override
@@ -101,14 +112,14 @@ class AudioPlayerScreenState extends State<AudioPlayerScreen>
             ),
             const SizedBox(height: 12),
             Text(
-              'XO',
+              'Audio from Pixabay video',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.w600),
             ),
             Text(
-              'Beyonce',
+              'by Alex Kuimov',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             // Display seek bar. Using StreamBuilder, this widget rebuilds

@@ -19,17 +19,22 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     super.initState();
     _subtitleController = SubtitleController();
-    rootBundle.loadString('assets/subtitle.vtt').then((value) {
+    rootBundle.loadString('assets/demo.vtt').then((value) {
       return _subtitleController.loadSubtitle(Subtitle.fromWebVTT(value));
     });
 
     _controller = VideoPlayerController.asset('assets/demo.mp4');
 
     _controller.addListener(() {
+      // handle looping
+      if (_controller.value.isPlaying &&
+          _controller.value.position.inMinutes == 0 &&
+          _controller.value.position.inSeconds == 0) {
+        _subtitleController.play(_controller.value.position);
+      }
       setState(() {});
     });
     _controller.setLooping(true);
-    _subtitleController.setLooping(true);
     _controller.initialize().then((_) => setState(() {}));
   }
 
