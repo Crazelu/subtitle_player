@@ -29,7 +29,7 @@ class Subtitle {
   /// Constructs [Subtitle] from SubRip [content]
   factory Subtitle.fromSubRip(String content) {
     List<String> splits = content.split('\n');
-    if (splits[0] != '0') {
+    if (!RegExp(r'^[01]$').hasMatch(splits[0])) {
       return Subtitle.empty();
     }
 
