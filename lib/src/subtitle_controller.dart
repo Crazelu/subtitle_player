@@ -62,14 +62,24 @@ class SubtitlePlayerValue {
 /// with audio and video players.
 class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
   SubtitleController() : super(SubtitlePlayerValue.empty());
+
   bool _disposed = false;
   Timer? _timer;
   Timer? _seekTimer;
 
   Subtitle? _subtitle;
+
+  /// Loaded subtitle for testing purposes.
+  @visibleForTesting
+  Subtitle? get subtitle => _subtitle;
+
   int _currentSubtitleRangeIndex = 0;
 
   num _playbackSpeed = 1;
+
+  /// Playback speed for testing purposes.
+  @visibleForTesting
+  num get playbackSpeed => _playbackSpeed;
 
   bool get _abort => _currentSubtitleRangeIndex == -1;
 
