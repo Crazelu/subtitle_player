@@ -83,6 +83,9 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
 
   bool get _abort => _currentSubtitleRangeIndex == -1;
 
+  /// Whether subtitle controller is actively syncing subtitles.
+  bool _isPlaying = false;
+
   /// Load subtitle content.
   ///
   /// Use:
@@ -168,18 +171,26 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
   /// [SubtitleController] seeks to [position] and starts
   /// synchronizing from there.
   void play([Duration? position]) {
+    _isPlaying = true;
     if (position != null && position != Duration.zero) {
       seekTo(position);
       return;
     }
 
-    pause();
+    _reset();
     _currentSubtitleRangeIndex = 0;
     _queueNextSubtitleRange();
   }
 
   /// Pauses subtitle synchronization.
   void pause() {
+    _isPlaying = false;
+    _reset();
+  }
+
+  /// Resets synchronization state and cancels pending timers.
+  /// This effectively pauses subtitle synchronizations.
+  void _reset() {
     _currentSubtitleRangeIndex = -1;
     _timer?.cancel();
     _seekTimer?.cancel();
@@ -187,7 +198,7 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
 
   /// Sets the current subtitle synchronization to be at [position].
   void seekTo(Duration position) {
-    pause();
+    _reset();
 
     _updateValueSafely(() {
       value = value.copyWith(
@@ -209,6 +220,8 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
         );
       });
 
+      if (!_isPlaying) return;
+
       _seekTimer = Timer(
         Duration(
           microseconds:
@@ -220,6 +233,7 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
         },
       );
     } else {
+      if (!_isPlaying) return;
       _seekTimer = Timer(
         Duration(
           microseconds:
