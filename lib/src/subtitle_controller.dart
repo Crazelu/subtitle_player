@@ -198,18 +198,19 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
 
   /// Syncs subtitle completely based on playing [position].
   void sync(Duration position) {
-    final result = _subtitle?.findSubtitleRangeAt(position);
-    if (result == null || result.subtitleRange == null) return;
-
-    final subtitleRange = result.subtitleRange!;
-
-    if (subtitleRange.start <= position) {
-      _updateValueSafely(() {
-        value = value.copyWith(
-          currentSubtitle: subtitleRange.subtitle,
-          currentSubtitleIndex: result.index,
-        );
-      });
+    for (int i = 0; i < value.subtitleRanges.length; i++) {
+      final subtitle = value.subtitleRanges[i];
+      if (position >= subtitle.start && position <= subtitle.end) {
+        if (value.currentSubtitleIndex != i) {
+          _updateValueSafely(() {
+            value = value.copyWith(
+              currentSubtitle: subtitle.subtitle,
+              currentSubtitleIndex: i,
+            );
+          });
+        }
+        return;
+      }
     }
   }
 
