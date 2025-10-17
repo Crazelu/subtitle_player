@@ -7,18 +7,18 @@
 </p>
 
 
-A Flutter package for synchronizing subtitles with video and audio playback.
+A library for synchronizing subtitles with video and audio playback.
 
 
 ## Features 📦
 
-- [x] Load SubRip, WebVTT and LRC subtitles
+- [x] Load SubRip, WebVTT and LRC formats
 - [x] Play, pause and seek support
 - [x] Adjust playback speed
 
 ## Install 🚀
 
-In the `pubspec.yaml` of your flutter project, add the `subtitle_player` dependency:
+In the `pubspec.yaml` of your Flutter/Dart project, add the `subtitle_player` dependency:
 
 ```yaml
 dependencies:
@@ -84,7 +84,7 @@ Subscribe to `SubtitleController` for changes using `ValuelistenableBuilder`, `L
 )
 ```
 
-Alternatively, you can attach a listener to the playback's duration and call the `sync` method whenever that changes.
+Alternatively, you can attach a listener to the audio/video playback's position and call the `sync` method whenever the position changes.
 
 ```dart
 // Example with JustAudio
