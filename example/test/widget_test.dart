@@ -13,26 +13,32 @@ void main() {
 
     expect(find.byType(TextButton), findsNWidgets(2));
   });
-  testWidgets('Test navigation to audio player example',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
 
-    await tester.tap(find.byType(TextButton).last);
-    await tester.pumpAndSettle();
+  testWidgets(
+    'Test navigation to audio player example',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
 
-    expect(find.byType(AudioPlayerScreen), findsOneWidget);
-  });
-  testWidgets('Test navigation to video player example',
-      (WidgetTester tester) async {
-    VideoPlayerPlatform.instance = MockVideoPlatform();
-    await tester.pumpWidget(const MyApp());
+      await tester.tap(find.byType(TextButton).last);
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(TextButton).first);
-    await tester.pump();
-    await tester.pump();
+      expect(find.byType(AudioPlayerScreen), findsOneWidget);
+    },
+  );
 
-    expect(find.byType(VideoPlayerScreen), findsOneWidget);
-  });
+  testWidgets(
+    'Test navigation to video player example',
+    (WidgetTester tester) async {
+      VideoPlayerPlatform.instance = MockVideoPlatform();
+      await tester.pumpWidget(const MyApp());
+
+      await tester.tap(find.byType(TextButton).first);
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(VideoPlayerScreen), findsOneWidget);
+    },
+  );
 }
 
 class MockVideoPlatform
@@ -106,5 +112,20 @@ class MockVideoPlatform
   @override
   Stream<VideoEvent> videoEventsFor(int textureId) {
     return const Stream.empty();
+  }
+
+  @override
+  Widget buildViewWithOptions(VideoViewOptions options) {
+    return const SizedBox.shrink();
+  }
+
+  @override
+  Future<int?> createWithOptions(VideoCreationOptions options) {
+    return Future.value(1);
+  }
+
+  @override
+  Future<void> setAllowBackgroundPlayback(bool allowBackgroundPlayback) {
+    return Future.value();
   }
 }
