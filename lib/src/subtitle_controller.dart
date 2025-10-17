@@ -63,24 +63,35 @@ class SubtitlePlayerValue {
 class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
   SubtitleController() : super(SubtitlePlayerValue.empty());
 
+  /// Indicates whether this controller has been disposed.
   bool _disposed = false;
+
+  /// Internal timer for synchronizing subtitles
+  /// for [play] and [pause] operations.
   Timer? _timer;
+
+  /// Internal timer for synchronizing subtitles
+  /// when a [seekTo] operation is performed.
   Timer? _seekTimer;
 
+  /// Loaded subtitle.
   Subtitle? _subtitle;
 
   /// Loaded subtitle for testing purposes.
   @visibleForTesting
   Subtitle? get subtitle => _subtitle;
 
+  /// Index of the current subtitle range.
   int _currentSubtitleRangeIndex = 0;
 
+  /// The current playback speed for the subtitle sync.
   num _playbackSpeed = 1;
 
   /// Playback speed for testing purposes.
   @visibleForTesting
   num get playbackSpeed => _playbackSpeed;
 
+  /// Indicates that subtitle synchronization should be terminated.
   bool get _abort => _currentSubtitleRangeIndex == -1;
 
   /// Whether subtitle controller is actively syncing subtitles.
@@ -115,6 +126,13 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
     }
   }
 
+  /// Updates the next subtitle range (if any) as the current one
+  /// and queues the next sync to happen after the duration
+  /// of the current subtitle range.
+  ///
+  /// At the end of the subtitle ranges,
+  /// the current subtitle values are reset to negative
+  /// defaults which allows [_abort] to signal a termination of the sync.
   void _queueNextSubtitleRange([bool wait = true]) async {
     final subtitleRanges = _subtitle?.ranges ?? <SubtitleRange>[];
 
