@@ -77,7 +77,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        color: Colors.black.withOpacity(0.65),
+                        color: Colors.black.withValues(alpha: 0.65),
                       ),
                       child: Text(
                         subtitleValue.currentSubtitle,

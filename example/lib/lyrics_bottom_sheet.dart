@@ -139,7 +139,7 @@ class LyricsWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: active ? FontWeight.bold : FontWeight.w700,
-              color: active ? Colors.black : Colors.black.withOpacity(0.4),
+              color: active ? Colors.black : Colors.black.withValues(alpha: .4),
             ),
           ),
         ),
