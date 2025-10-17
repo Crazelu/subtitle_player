@@ -2,13 +2,15 @@ import 'package:subtitle_player/subtitle_player.dart';
 import 'package:test/test.dart';
 
 void main() {
-  const lrcContent = '''[00:11.20]Your love is bright as ever
+  const lrcContent = '''
+[00:11.20]Your love is bright as ever
 [00:17.20]Even in the shadows
 [00:23.00]Baby kiss me
 [00:27.50]Before they turn the lights out
 ''';
 
-  const subRipContent = '''0
+  const subRipContent = '''
+0
 00:00:11,200 --> 00:00:17,200
 Your love is bright as ever
 
@@ -25,7 +27,8 @@ Baby kiss me
 Before they turn the lights out
 ''';
 
-  const webVTTContent = '''WEBVTT
+  const webVTTContent = '''
+WEBVTT
 
 00:00:11.200 --> 00:00:17.200
 Your love is bright as ever
@@ -78,6 +81,7 @@ Before they turn the lights out
           );
         },
       );
+
       test(
         'Given a subtitle is constructed from LRC, '
         'when findSubtitleRangeAt is called with a duration greater '

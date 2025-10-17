@@ -52,14 +52,14 @@ class AudioPlayerScreenState extends State<AudioPlayerScreen>
       }
     }, onError: (Object e, StackTrace stackTrace) {
       // Listen to errors during playback.
-      print('A stream error occurred: $e');
+      debugPrint('A stream error occurred: $e');
     });
     // Try to load audio from a source and catch any errors.
     try {
       // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
       await _player.setAudioSource(AudioSource.asset('assets/demo.mp3'));
     } on PlayerException catch (e) {
-      print("Error loading audio source: $e");
+      debugPrint("Error loading audio source: $e");
     }
 
     _player.setLoopMode(LoopMode.all);

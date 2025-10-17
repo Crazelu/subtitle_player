@@ -63,24 +63,35 @@ class SubtitlePlayerValue {
 class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
   SubtitleController() : super(SubtitlePlayerValue.empty());
 
+  /// Indicates whether this controller has been disposed.
   bool _disposed = false;
+
+  /// Internal timer for synchronizing subtitles
+  /// for [play] and [pause] operations.
   Timer? _timer;
+
+  /// Internal timer for synchronizing subtitles
+  /// when a [seekTo] operation is performed.
   Timer? _seekTimer;
 
+  /// Loaded subtitle.
   Subtitle? _subtitle;
 
   /// Loaded subtitle for testing purposes.
   @visibleForTesting
   Subtitle? get subtitle => _subtitle;
 
+  /// Index of the current subtitle range.
   int _currentSubtitleRangeIndex = 0;
 
+  /// The current playback speed for the subtitle sync.
   num _playbackSpeed = 1;
 
   /// Playback speed for testing purposes.
   @visibleForTesting
   num get playbackSpeed => _playbackSpeed;
 
+  /// Indicates that subtitle synchronization should be terminated.
   bool get _abort => _currentSubtitleRangeIndex == -1;
 
   /// Whether subtitle controller is actively syncing subtitles.
@@ -115,6 +126,13 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
     }
   }
 
+  /// Updates the next subtitle range (if any) as the current one
+  /// and queues the next sync to happen after the duration
+  /// of the current subtitle range.
+  ///
+  /// At the end of the subtitle ranges,
+  /// the current subtitle values are reset to negative
+  /// defaults which allows [_abort] to signal a termination of the sync.
   void _queueNextSubtitleRange([bool wait = true]) async {
     final subtitleRanges = _subtitle?.ranges ?? <SubtitleRange>[];
 
@@ -194,6 +212,39 @@ class SubtitleController extends ValueNotifier<SubtitlePlayerValue> {
     _currentSubtitleRangeIndex = -1;
     _timer?.cancel();
     _seekTimer?.cancel();
+  }
+
+  /// Syncs subtitle completely based on playing [position].
+  void sync(Duration position) {
+    for (int i = 0; i < value.subtitleRanges.length; i++) {
+      final range = value.subtitleRanges[i];
+
+      if (position >= range.start && position <= range.end) {
+        _updateValueSafely(
+          () {
+            value = value.copyWith(
+              currentSubtitle: range.subtitle,
+              currentSubtitleIndex: i,
+            );
+          },
+        );
+        return;
+      }
+    }
+
+    final index = value.subtitleRanges.indexWhere(
+      (range) => range.start > position,
+    );
+    if (index > 0) {
+      _updateValueSafely(
+        () {
+          value = value.copyWith(
+            currentSubtitle: value.subtitleRanges[index].subtitle,
+            currentSubtitleIndex: index,
+          );
+        },
+      );
+    }
   }
 
   /// Sets the current subtitle synchronization to be at [position].
