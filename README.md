@@ -1,5 +1,14 @@
 # Subtitle Player
+
+<p align="center">
+  <a href="https://pub.dev/packages/subtitle_player/score"><img src="https://img.shields.io/pub/likes/subtitle_player" alt="likes"></a>
+  <a href="https://pub.dev/packages/subtitle_player/score"><img src="https://img.shields.io/pub/points/subtitle_player" alt="pub points"></a>
+  <a href="https://codecov.io/gh/crazelu/subtitle_player"><img src="https://codecov.io/gh/crazelu/subtitle_player/graph/badge.svg" alt="code coverage"/></a>
+</p>
+
+
 A Flutter package for synchronizing subtitles with video and audio playback.
+
 
 ## Features 📦
 
@@ -13,9 +22,7 @@ In the `pubspec.yaml` of your flutter project, add the `subtitle_player` depende
 
 ```yaml
 dependencies:
-    subtitle_player:
-        git:
-            url: https://github.com/Crazelu/subtitle_player.git
+    subtitle_player: ^1.0.0
 ```
 
 ## Import the package in your project 📥
