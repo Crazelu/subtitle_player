@@ -77,6 +77,21 @@ Subscribe to `SubtitleController` for changes using `ValuelistenableBuilder`, `L
 )
 ```
 
+Alternatively, you can attach a listener to the playback's duration and call the `sync` method whenever that changes.
+
+```dart
+// Example with JustAudio
+
+final player = AudioPlayer();
+final positionStream = player.createPositionStream();
+
+final streamSubscription = positionStream.listen((position) {
+    subtitleController.sync(position);
+});
+
+// make sure to cancel the stream subscription when ready to release resources
+```
+
 Check the [example project](https://github.com/Crazelu/subtitle_player/tree/main/example) for more detailed usage examples both for video and audio playing.
 
 ## Demo 📷
